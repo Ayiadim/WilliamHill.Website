@@ -1,5 +1,9 @@
 # WilliamHill.Website
 
+How to run:
+
+Load up the .sln file in Visual Studio 2017 and run using any of the provided methods.
+
 Overview:
 
 I suprisingly did not notice that the provided endpoints were implemented, it was my assumption that they were only there as a guideline for
