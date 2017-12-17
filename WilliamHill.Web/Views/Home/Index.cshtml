@@ -1,0 +1,72 @@
+﻿@using Newtonsoft.Json;
+@using WilliamHill.Data.Models;
+@model List<Race>
+
+@{
+    Layout = "~/Views/Layouts/_Layout.cshtml";
+}
+
+@section head {
+    <link href="css/index.css" rel="stylesheet" type="text/css">
+}
+
+@section scripts {
+    <script src="js/index.js"></script>
+}
+
+@section mvcContent {
+    <div class="content">
+        <header>
+            <div class="navBar">
+                <img src="/images/william-hill.png" />
+            </div>
+        </header>
+
+        <main>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Status</th>
+                        <th>Start Date</th>
+                        <th>Total Money Placed</th>
+                    </tr>
+                </thead>
+
+                <tbody data-bind="foreach: Races">
+                    <tr data-bind="click: ToggleView">
+                        <td data-bind="text: ID"></td>
+                        <td data-bind="text: Name"></td>
+                        <td data-bind="text: Status"></td>
+                        <td data-bind="text: Start"></td>
+                        <td data-bind="text: TotalBets"></td>
+                    </tr>
+                    <tr data-bind="visible: InnerModel.IsVisible">
+                        <td colspan="5">
+                            @{ Html.RenderPartial("_InnerModel"); }
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </main>
+
+        <footer>
+            <div>
+                <p>
+                    <b>William Hill Coding Challenge</b>
+                    <br />
+                    17/12/2017 - Dimitri Agiakatsikas.
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var data = @Html.Raw(JsonConvert.SerializeObject(Model));
+            var viewModel = new RaceModel(data);
+            ko.applyBindings(viewModel, document.getElementById("content"));
+        });
+    </script>
+}

@@ -1,0 +1,37 @@
+﻿
+.navBar {
+    width: 100%;
+    background-color: #00143C;
+    text-align: center;
+}
+
+main {
+    padding: 5px;
+}
+
+footer {
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+}
+
+table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+}
+
+table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.nested {
+    background: #eee !important;
+}

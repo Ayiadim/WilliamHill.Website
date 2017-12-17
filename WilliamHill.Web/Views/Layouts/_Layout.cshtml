@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=1200" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <title>William Hill</title>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+
+    @RenderSection("head", false)
+</head>
+
+<body>
+    @RenderSection("mvcContent", false)
+    @RenderSection("scripts", true)
+</body>
+
+</html>
