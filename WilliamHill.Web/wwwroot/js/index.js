@@ -23,7 +23,7 @@ function Race(raceData) {
     self.Name = raceData.Name;
     self.Start = raceData.Start;
     self.Status = raceData.Status;
-    self.TotalBets = raceData.TotalMoneyPlaced;
+    self.TotalAmount = raceData.TotalMoneyPlaced;
     self.Horses = raceData.Horses;
 
     self.InnerModel = new InnerModel(self.Horses);

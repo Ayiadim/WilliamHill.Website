@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Net.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WilliamHill.Data;
+using WilliamHill.Data.Models;
+using WilliamHill.Service;
+using WilliamHill.Data.Helpers;
 
 namespace WilliamHill.Web
 {
@@ -29,6 +33,14 @@ namespace WilliamHill.Web
                 o.InputFormatters.Add(new XmlSerializerInputFormatter());
                 o.OutputFormatters.Add(new XmlSerializerOutputFormatter());
             });
+
+            services.AddSingleton<HttpClient>();
+            services.AddTransient<IHttpHelper, HttpHelper>();
+            services.AddTransient<IRepository<Bet>, BetRepository>();
+            services.AddTransient<IRepository<Race>, RaceRepository>();
+            services.AddTransient<IRepository<Customer>, CustomerRepository>();
+            services.AddTransient<IRaceService, RaceService>();
+            services.AddTransient<ICustomerService, CustomerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

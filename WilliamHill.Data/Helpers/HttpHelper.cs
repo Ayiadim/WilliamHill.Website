@@ -6,11 +6,16 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using WilliamHill.Data.Models;
 
-namespace WilliamHill.Web.Helpers
+namespace WilliamHill.Data.Helpers
 {
-    public static class HttpHelper<T>
+    public interface IHttpHelper
     {
-        public static async Task<IEnumerable<T>> Get(string endpoint)
+        Task<IEnumerable<T>> Get<T>(string endpoint);
+    }
+
+    public class HttpHelper : IHttpHelper
+    {
+        public async Task<IEnumerable<T>> Get<T>(string endpoint)
         {
             try
             {

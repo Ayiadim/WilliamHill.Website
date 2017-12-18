@@ -1,16 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
-using WilliamHill.Data.Models;
-using WilliamHill.Web.Helpers;
+using WilliamHill.Service;
 
 namespace WilliamHill.Web.Controllers
 {
@@ -18,24 +11,12 @@ namespace WilliamHill.Web.Controllers
     {
 
         private readonly IConfiguration _config;
-        private string racesEndpoint;
-        private string betsEndpoint;
+        private readonly IRaceService _raceService;
 
-        public HomeController(IConfiguration config)
+        public HomeController(IConfiguration config, IRaceService raceService)
         {
-            this._config = config;
-
-            racesEndpoint = string.Format("{0}/{1}?name={2}",
-                _config["Endpoints:baseUrl"],
-                _config["Endpoints:racesUrl"],
-                _config["AppName"]
-            );
-
-            betsEndpoint = string.Format("{0}/{1}?name={2}",
-                _config["Endpoints:baseUrl"],
-                _config["Endpoints:betsUrl"],
-                _config["AppName"]
-            );
+            _config = config;
+            _raceService = raceService;
         }
 
         [HttpGet]
@@ -43,19 +24,7 @@ namespace WilliamHill.Web.Controllers
         {
             try
             {
-                var races = await HttpHelper<Race>.Get(racesEndpoint);
-                var bets = await HttpHelper<Bet>.Get(betsEndpoint);
-
-                foreach (var race in races)
-                {
-                    race.TotalMoneyPlaced = race.GetTotalMoneyPlaced(bets);
-                    foreach (var horse in race.Horses)
-                    {
-                        horse.TotalBets = horse.GetTotalBets(bets);
-                        horse.Payout = horse.GetPayout(bets);
-                    }
-                }
-
+                var races = await _raceService.GetRaces();
                 return View(races);
             }
             catch (Exception e)

@@ -1,53 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
-using WilliamHill.Data.Models;
-using WilliamHill.Web.Helpers;
+using WilliamHill.Service;
 
 namespace WilliamHill.Web.Controllers
 {
     public class CustomersController : Controller
     {
+
         private readonly IConfiguration _config;
-        private string customersEndpoint;
-        private string betsEndpoint;
-        private const int RISKY_THRESHOLD = 200;
+        private readonly ICustomerService _customerService;
 
-
-        public CustomersController(IConfiguration config)
+        public CustomersController(IConfiguration config, ICustomerService customerService)
         {
-            this._config = config;
-
-            customersEndpoint = string.Format("{0}/{1}?name={2}",
-                _config["Endpoints:baseUrl"],
-                _config["Endpoints:customersUrl"],
-                _config["AppName"]
-            );
-
-            betsEndpoint = string.Format("{0}/{1}?name={2}",
-                _config["Endpoints:baseUrl"],
-                _config["Endpoints:betsUrl"],
-                _config["AppName"]
-            );
+            _config = config;
+            _customerService = customerService;
         }
 
         //2a
         [HttpGet]
-        public async Task<JsonResult> GetAll()
+        public JsonResult GetAll()
         {
             try
             {
-                var customers = await HttpHelper<Customer>.Get(customersEndpoint);
-
-                return Json(customers);
+                var result = _customerService.GetAllCustomers();
+                return Json(result);
             }
             catch (Exception e)
             {
@@ -57,15 +35,12 @@ namespace WilliamHill.Web.Controllers
 
         //2b
         [HttpGet]
-        public async Task<JsonResult> GetTotalBets(int id)
+        public JsonResult GetTotalBets(int id)
         {
             try
             {
-                var bets = await HttpHelper<Bet>.Get(betsEndpoint);
-
-                var totalBets = bets.Where(b => b.CustomerID == id).ToList();
-
-                return Json(totalBets.Count);
+                var result = _customerService.GetTotalBets(id);
+                return Json(result);
             }
             catch (Exception e)
             {
@@ -75,21 +50,12 @@ namespace WilliamHill.Web.Controllers
 
         //2c
         [HttpGet]
-        public async Task<JsonResult> GetTotalBetAmount(int id)
+        public JsonResult GetTotalBetAmount(int id)
         {
             try
             {
-                var bets = await HttpHelper<Bet>.Get(betsEndpoint);
-
-                var totalBets = bets.Where(b => b.CustomerID == id).ToList();
-
-                double total = 0;
-                foreach (var bet in totalBets)
-                {
-                    total += bet.Stake;
-                }
-
-                return Json(total);
+                var result = _customerService.GetTotalBetAmount(id);
+                return Json(result);
             }
             catch (Exception e)
             {
@@ -99,19 +65,12 @@ namespace WilliamHill.Web.Controllers
 
         //2d
         [HttpGet]
-        public async Task<JsonResult> GetTotalBetAmount()
+        public JsonResult GetTotalBetAmount()
         {
             try
             {
-                var bets = await HttpHelper<Bet>.Get(betsEndpoint);
-
-                double total = 0;
-                foreach (var bet in bets)
-                {
-                    total += bet.Stake;
-                }
-
-                return Json(total);
+                var result = _customerService.GetTotalBetAmount();
+                return Json(result);
             }
             catch (Exception e)
             {
@@ -121,36 +80,17 @@ namespace WilliamHill.Web.Controllers
 
         //2e
         [HttpGet]
-        public async Task<JsonResult> GetRiskyCustomers()
+        public JsonResult GetRiskyCustomers()
         {
             try
             {
-                var customers = await HttpHelper<Customer>.Get(customersEndpoint);
-                var bets = await HttpHelper<Bet>.Get(betsEndpoint);
-
-                var riskyCustomers = new List<Customer>();
-                foreach(var customer in customers)
-                {
-                    // Could re-use code in GetTotalBetAmount if ported to a helper.
-                    var totalBets = bets.Where(b => b.CustomerID == customer.ID).ToList();
-                    double totalAmount = 0;
-                    foreach(var bet in totalBets)
-                    {
-                        totalAmount += bet.Stake;
-                    }
-                    if(totalAmount > RISKY_THRESHOLD)
-                    {
-                        riskyCustomers.Add(customer);
-                    }
-                }
-
-                return Json(riskyCustomers);
+                var result = _customerService.GetRiskyCustomers();
+                return Json(result);
             }
             catch (Exception e)
             {
                 return null;
             }
         }
-
     }
 }
