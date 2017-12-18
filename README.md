@@ -6,6 +6,8 @@ How to run:
 
 Load up the .sln file in Visual Studio 2017 and ruF:\Projects\WilliamHill-Web\WilliamHill.Service\MockCustomerRepository.csn using any of the provided methods.
 
+The horses for each race will show up if you click on the row.
+
 -----------------------
 Possible Improvements
 -----------------------

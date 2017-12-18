@@ -27,11 +27,23 @@ table th {
     text-align: left;
 }
 
+.mainTable tbody tr {
+    cursor: pointer;
+}
+
+.nestedTable tbody tr {
+    cursor: default;
+}
+
+.nestedTable thead tr {
+    cursor: default;
+}
+
 table td {
     border: 1px solid #ddd;
     padding: 8px;
 }
 
-.nested {
+.nestedTable {
     background: #eee !important;
 }
